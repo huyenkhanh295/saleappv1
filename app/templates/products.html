@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách sản phẩm</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"/>
+</head>
+<body>
+    <h1>QUẢN LÍ SẢN PHẨM</h1>
+    <div><a href="#">Thêm sản phẩm</a></div>
+    <div class="container" align="center">
+        <table border="solid 1px " class="table">
+        {% for p in products %}
+        <tr>
+            <td><img width="120" src="{{ p.images }}" alt="{{ p.name }}" /></td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.description }}</td>
+            <td>{{ p.price }} VNĐ</td>
+            <td>{{ p.category_id }}</td>
+            <td>
+                <a href="#">Cập nhật</a> | <a href="#">Xóa</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+</body>
+</html>

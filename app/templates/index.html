@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+</head>
+<body>
+    <h1>BÁN HÀNG TRỰC TUYẾN</h1>
+    <ul>
+        <li><a href="{{ url_for('products_list') }}">Tất cả</a></li>
+        <li><a href="{{ url_for('products_by_cat_id', category_id=1) }}">Điện thoại di động</a></li>
+        <li><a href="{{ url_for('products_by_cat_id', category_id=2) }}">Máy tính bảng</a></li>
+    </ul>
+</body>
+</html>
