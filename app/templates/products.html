@@ -4,10 +4,29 @@
     <meta charset="UTF-8">
     <title>Danh sách sản phẩm</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 <body>
+    <div class="container">
     <h1>QUẢN LÍ SẢN PHẨM</h1>
-    <div><a href="#">Thêm sản phẩm</a></div>
+    <form>
+        <div class="form-group">
+            <label>Tìm theo tên</label>
+            <input type="text" name="keyword" class="form-control" placeholder="Nhập từ khóa"/>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-danger" value="Tìm"/>
+        </div>
+        <div class="form-group">
+            <label>Tìm theo giá</label>
+            <input type="number" name="from_price" class="form-control" placeholder="Nhập giá bắt đầu"/>
+            <input type="number" name="to_price" class="form-control" placeholder="Nhập giá kết thúc"/>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-danger" value="Tìm"/>
+        </div>
+    </form>
+    <div><a href="{{ url_for('add_or_update_product')}}">Thêm sản phẩm</a></div>
     <div class="container" align="center">
         <table border="solid 1px " class="table">
         {% for p in products %}
@@ -18,11 +37,13 @@
             <td>{{ p.price }} VNĐ</td>
             <td>{{ p.category_id }}</td>
             <td>
-                <a href="#">Cập nhật</a> | <a href="#">Xóa</a>
+                <a href="{{ url_for('add_or_update_product',  product_id=p.id) }}">Cập nhật</a> |
+                <a href="#">Xóa</a>
             </td>
         </tr>
         {% endfor %}
     </table>
+    </div>
     </div>
 </body>
 </html>

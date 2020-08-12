@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+    <h1>
+        {% if request.args.get('product_id') %} Cap nhat {% else %}Them{% endif %} san pham
+    </h1>
+    <div class="container">
+        {% if err %}
+        <div class="alert alert-danger">
+            {{ err }}
+        </div>
+        {% endif %}
+        <form method="post">
+            <div class="form-group">
+                <label>Ten san pham</label>
+                <input type="text" value="{{ product.name }}" name="name" class="form-group"/>
+            </div>
+            <div class="form-group">
+                <label>Gia san pham</label>
+                <input type="text" value="{{ product.price}}"  name="price" class="form-group"/>
+            </div>
+            <div class="form-group">
+                <label>Anh san pham</label>
+                <input type="text" value="{{ product.images }}"  name="images" class="form-group"/>
+            </div>
+            <div class="form-group">
+                <label>Mo ta san pham</label>
+                <textarea class="form-control" name="description">{{ product.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Danh muc</label>
+                <select class="form-control" name="category_id">
+                    {% for cat in categories %}
+                    <option name="category_id" value="{{cat.id}}" {% if cat.id == product.category_id %}selected{% endif %}>{{ cat.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="{% if request.args.get('product_id') %} Cap nhat {% else %}Them{% endif %} san pham" />
+            </div>
+        </form>
+    </div>
+</body>
+</html>
