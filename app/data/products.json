@@ -26,9 +26,9 @@
     {
         "id": 4,
         "name": "samsung galaxy 10",
-        "description": "ssaaaaaa",
+        "description": "",
         "price": 1222121.0,
-        "images": "sssssaasas",
-        "category_id": 2
+        "images": "aa",
+        "category_id": 1
     }
 ]

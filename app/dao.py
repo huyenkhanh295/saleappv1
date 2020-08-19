@@ -1,6 +1,12 @@
 import json
 import os
 from app import app
+import hashlib
+
+
+def read_categories():
+    with open(os.path.join(app.root_path, "data/categories.json"), encoding="utf-8") as f:
+        return json.load(f)
 
 
 def read_product_id(product_id):
@@ -23,7 +29,7 @@ def read_products(category_id=0, keyword=None, from_price=None, to_price=None):
             products = [p for p in products if p["name"].lower().find(keyword.lower()) >= 0]
 
         if from_price and to_price:
-            products = [p for p in products if p["price"] >= float(from_price) and p["price"] <= float(to_price)]
+            products = [p for p in products if float(from_price) <= p["price"] <= float(to_price)]
 
             # cach truyen thong
             # results = []
@@ -45,6 +51,10 @@ def update_product(product_id, name, description, price, images, category_id):
 
             break
 
+    return update_json(products)
+
+
+def update_json(products):
     try:
         with open(os.path.join(app.root_path, "data/products.json"),
                   "w", encoding="utf-8") as f:
@@ -80,9 +90,33 @@ def add_product(name, description, price, images, category_id):
         return False
 
 
-def read_categories():
-    with open(os.path.join(app.root_path, "data/categories.json"), encoding="utf-8") as f:
+def delete_product(product_id):
+    products = read_products()
+    # lap tren danh sach, lay chi so dung enumerete do python ho tro
+    for idx, product in enumerate(products):
+        if product["id"] == int(product_id):
+            del products[idx]
+            break
+
+    return update_json(products=products)
+
+
+def read_user():
+    with open(os.path.join(app.root_path, "data/users.json"),
+              encoding="utf-8") as f:
         return json.load(f)
+
+
+def validate_user(username, password):
+    users = read_user()
+    # strip() tuong tu strim() trong java
+    password = str(hashlib.md5(password.strip().encode("utf-8")).hexdigest())
+
+    for user in users:
+        if user["username"].strip() == username.strip() and user["password"] == password:
+            return user
+
+    return None
 
 
 if __name__ == "__main__":
