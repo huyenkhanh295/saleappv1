@@ -160,5 +160,22 @@ def logout():
     return redirect(url_for("index"))
 
 
+@app.route("/register", methods=["get", "post"])
+def register():
+    err_msg = ""
+    if request.method == "POST":
+        name = request.form.get("name")
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirm = request.form.get("confirm")
+
+        if password.strip() != confirm.strip():
+            err_msg = "The password does not match!"
+        else:
+            pass
+
+    return render_template("register.html", err_msg=err_msg)
+
+
 if __name__ == "__main__":
     app.run(debug=False)
