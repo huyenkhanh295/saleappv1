@@ -67,8 +67,9 @@
             <td>{{ p.category_id }}</td>
             <td>
                 <a href="{{ url_for('add_or_update_product',  product_id=p.id) }}">Cập nhật</a> |
-                <a href="javascript:;" onclick="delete_product({{p.id}})">Xóa</a>
+                <a href="javascript:;" onclick="delete_product({{p.id}})">Xóa</a> |
 <!--                ngan chan tu dong chuyen huong-->
+                <a href="javascript:;">Them vao gio</a>
             </td>
         </tr>
         {% endfor %}

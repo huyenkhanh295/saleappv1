@@ -172,7 +172,10 @@ def register():
         if password.strip() != confirm.strip():
             err_msg = "The password does not match!"
         else:
-            pass
+            avatar = utils.upload_avatar(request.files["avatar"])
+            if dao.add_user(name=name, username=username, password=password,
+                            avatar=avatar):
+                return redirect(url_for("login"))
 
     return render_template("register.html", err_msg=err_msg)
 

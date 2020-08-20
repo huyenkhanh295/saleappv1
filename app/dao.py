@@ -4,12 +4,14 @@ from app import app
 import hashlib
 
 
-def add_user(name, username, password):
+def add_user(name, username, password, avatar):
     users = read_user()
     user = {
+        "id": len(users) + 1,
         "name": name,
+        "avatar": avatar,
         "username": username,
-        "password": password
+        "password": str(hashlib.md5(password.encode('utf-8')).hexdigest())
     }
     users.append(user)
 

@@ -1,11 +1,30 @@
-[{
-  "id": 1,
-  "name": "Nguyen Van Nam",
-  "username": "vana",
-  "password": "e10adc3949ba59abbe56e057f20f883e"
-},{
-  "id": 2,
-  "name": "Le hong quan",
-  "username": "ngocb",
-  "password": "e10adc3949ba59abbe56e057f20f883e"
-}]
+[
+    {
+        "id": 1,
+        "name": "Nguyen Van Nam",
+        "username": "vana",
+        "password": "e10adc3949ba59abbe56e057f20f883e",
+        "avatar": ""
+    },
+    {
+        "id": 2,
+        "name": "Le hong quan",
+        "username": "ngocb",
+        "password": "e10adc3949ba59abbe56e057f20f883e",
+        "avatar": ""
+    },
+    {
+        "id": 3,
+        "name": "tran van b",
+        "username": "test",
+        "password": "e10adc3949ba59abbe56e057f20f883e",
+        "avatar": ""
+    },
+    {
+        "id": 4,
+        "name": "le van c",
+        "avatar": "images/avatar/user-2.png",
+        "username": "demo",
+        "password": "e10adc3949ba59abbe56e057f20f883e"
+    }
+]
