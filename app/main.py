@@ -1,22 +1,13 @@
+import json
+
 from flask import render_template, request, redirect, url_for, jsonify, send_file, session
 from app import app, dao, utils
-from functools import wraps
-
-
-def login_required(f):
-    @wraps(f)
-    def check(*args, **kwargs):
-        if not session.get("user"):
-            return redirect(url_for("login", next=request.url))
-
-        return f(*args, **kwargs)
-
-    return check
+from app.decorator import login_required
 
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", latest_products=dao.read_products(latest=True))
 
 
 @app.route("/products")
@@ -158,6 +149,57 @@ def login():
 def logout():
     session["user"] = None
     return redirect(url_for("index"))
+
+
+@app.route("/register", methods=["get", "post"])
+def register():
+    err_msg = ""
+    if request.method == "POST":
+        name = request.form.get("name")
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirm = request.form.get("confirm")
+        if password.strip() != confirm.strip():
+            err_msg = "The password does not match!"
+        else:
+            path = utils.upload_avatar(file=request.files["avatar"])
+            if dao.add_user(name=name, username=username,
+                            password=password, avatar=path):
+                return redirect(url_for('login'))
+            else:
+                err_msg = "Something wrong!!!"
+
+    return render_template("register.html", err_msg=err_msg)
+
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
+
+
+@app.route("/api/cart", methods=['post'])
+def add_to_cart():
+    data = json.loads(request.data)
+    product_id = data["id"]
+    name = data["name"]
+    price = data["price"]
+
+    try:
+        q, s = utils.add_to_cart(id=product_id, name=name, price=price)
+
+        return jsonify({"status": 200, "error_message": "successful", "quantity": q, "sum_cart": s})
+    except Exception as ex:
+        return jsonify({"status": 500, "error_message": str(ex)})
+
+
+@app.context_processor
+def common_data():
+    q, s = utils.cart_stats()
+    return {
+        'categories': dao.read_categories(),
+        'cart_quantity': q,
+        'cart_sum': s
+    }
 
 
 if __name__ == "__main__":

@@ -2,41 +2,48 @@ import json
 import os
 from app import app
 import hashlib
+from app.models import Category, Product
 
 
 def read_categories():
-    with open(os.path.join(app.root_path, "data/categories.json"), encoding="utf-8") as f:
-        return json.load(f)
+    return Category.query.all()
 
 
 def read_product_id(product_id):
-    products = read_products()
-    for p in products:
-        if p["id"] == product_id:
-            return p
-
-    return None
+    return Product.query.get(product_id)
 
 
-def read_products(category_id=0, keyword=None, from_price=None, to_price=None):
-    with open(os.path.join(app.root_path, "data/products.json"), encoding="utf-8") as f:
-        products = json.load(f)
+def read_products(category_id=0, keyword=None, from_price=None, to_price=None, latest=True):
+    q = Product.query
 
-        if category_id > 0:
-            products = [p for p in products if p["category_id"] == category_id]
+    if keyword:
+        q = q.filter(Product.name.contains(keyword))
 
-        if keyword:
-            products = [p for p in products if p["name"].lower().find(keyword.lower()) >= 0]
+    if from_price and to_price:
+        q = q.filter(Product.price__gt__(from_price), Product.price.__lt__(to_price))
 
-        if from_price and to_price:
-            products = [p for p in products if float(from_price) <= p["price"] <= float(to_price)]
+    if latest:
+        return q.all()[:5]
 
-            # cach truyen thong
-            # results = []
-            # for p in products:
-            #     if p["category_id"] == category_id:
-            #         results.append()
-        return products
+    return q.all()
+    # with open(os.path.join(app.root_path, "data/products.json"), encoding="utf-8") as f:
+    #     products = json.load(f)
+    #
+    #     if category_id > 0:
+    #         products = [p for p in products if p["category_id"] == category_id]
+    #
+    #     if keyword:
+    #         products = [p for p in products if p["name"].lower().find(keyword.lower()) >= 0]
+    #
+    #     if from_price and to_price:
+    #         products = [p for p in products if float(from_price) <= p["price"] <= float(to_price)]
+    #
+    #         # cach truyen thong
+    #         # results = []
+    #         # for p in products:
+    #         #     if p["category_id"] == category_id:
+    #         #         results.append()
+    #     return products
 
 
 def update_product(product_id, name, description, price, images, category_id):
@@ -101,14 +108,28 @@ def delete_product(product_id):
     return update_json(products=products)
 
 
-def read_user():
+def read_users():
     with open(os.path.join(app.root_path, "data/users.json"),
               encoding="utf-8") as f:
         return json.load(f)
 
 
+def add_user(name, username, password, avatar):
+    users = read_users()
+    user = {
+        "id": len(users) + 1,
+        "name": name,
+        "avatar": avatar,
+        "username": username,
+        "password": str(hashlib.md5(password.encode('utf-8')).hexdigest())
+    }
+    users.append(user)
+
+    return update_json(users, path="data/users.json")
+
+
 def validate_user(username, password):
-    users = read_user()
+    users = read_users()
     # strip() tuong tu strim() trong java
     password = str(hashlib.md5(password.strip().encode("utf-8")).hexdigest())
 

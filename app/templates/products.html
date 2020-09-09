@@ -6,6 +6,23 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script>
+        function add_to_cart(id, name, price) {
+            fetch("/api/cart", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: id,
+                    name: name,
+                    price: price
+                })
+            }).then(res => res.json()).then(data => {
+                var cart = document.getElementById("cartId")
+                cart.innerText = data.quantity
+            })
+        }
+
         function delete_product(productId) {
 <!--      ham fetch goi tuong tac api  -->
             var c = confirm("Ban co chac chan xoa khong?");
@@ -60,15 +77,16 @@
         <table border="solid 1px " class="table">
         {% for p in products %}
         <tr id="product{{ p.id }}">
-            <td><img width="120" src="{{ p.images }}" alt="{{ p.name }}" /></td>
+            <td><img width="120" src="{{ p.image }}" alt="{{ p.name }}" /></td>
             <td>{{ p.name }}</td>
             <td>{{ p.description }}</td>
-            <td>{{ p.price }} VNĐ</td>
+            <td>{{ "{:,.2f}".format(p.price) }} VNĐ</td>
             <td>{{ p.category_id }}</td>
             <td>
                 <a href="{{ url_for('add_or_update_product',  product_id=p.id) }}">Cập nhật</a> |
                 <a href="javascript:;" onclick="delete_product({{p.id}})">Xóa</a>
-<!--                ngan chan tu dong chuyen huong-->
+<!--         javascripts:; => ngan chan tu dong chuyen huong-->
+                <a href="javascript:;" onclick="add_to_cart({{p.id}}, '{{p.name}}', {{ p.price }})">THEM VAO GIO</a>
             </td>
         </tr>
         {% endfor %}
