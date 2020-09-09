@@ -19,15 +19,15 @@
         <form method="post">
             <div class="form-group">
                 <label>Ten san pham</label>
-                <input type="text" value="{{ product.name }}" name="name" class="form-group"/>
+                <input type="text" value="{{ product.name }}" name="name" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>Gia san pham</label>
-                <input type="text" value="{{ product.price}}"  name="price" class="form-group"/>
+                <input type="text" value="{{ product.price}}"  name="price" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>Anh san pham</label>
-                <input type="text" value="{{ product.images }}"  name="images" class="form-group"/>
+                <input type="text" value="{{ product.images }}"  name="images" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>Mo ta san pham</label>
@@ -42,7 +42,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="submit" value="{% if request.args.get('product_id') %} Cap nhat {% else %}Them{% endif %} san pham" />
+                <input class="btn btn-danger" type="submit" value="{% if request.args.get('product_id') %} Cap nhat {% else %}Them{% endif %} san pham" />
             </div>
         </form>
     </div>

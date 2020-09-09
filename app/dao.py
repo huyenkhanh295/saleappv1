@@ -5,6 +5,20 @@ import hashlib
 from app.models import Category, Product
 
 
+def add_user(name, username, password, avatar):
+    users = read_user()
+    user = {
+        "id": len(users) + 1,
+        "name": name,
+        "avatar": avatar,
+        "username": username,
+        "password": str(hashlib.md5(password.encode('utf-8')).hexdigest())
+    }
+    users.append(user)
+
+    return update_json(users, path="data/users.json")
+
+
 def read_categories():
     return Category.query.all()
 
@@ -61,9 +75,9 @@ def update_product(product_id, name, description, price, images, category_id):
     return update_json(products)
 
 
-def update_json(products):
+def update_json(products, path="data/products.json"):
     try:
-        with open(os.path.join(app.root_path, "data/products.json"),
+        with open(os.path.join(app.root_path, path),
                   "w", encoding="utf-8") as f:
             json.dump(products, f, ensure_ascii=False, indent=4)
 
