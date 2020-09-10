@@ -80,7 +80,7 @@
             <td><img width="120" src="{{ p.image }}" alt="{{ p.name }}" /></td>
             <td>{{ p.name }}</td>
             <td>{{ p.description }}</td>
-            <td>{{ "{:,.2f}".format(p.price) }} VNĐ</td>
+            <td>{{ p.price }} VNĐ</td>
             <td>{{ p.category_id }}</td>
             <td>
                 <a href="{{ url_for('add_or_update_product',  product_id=p.id) }}">Cập nhật</a> |

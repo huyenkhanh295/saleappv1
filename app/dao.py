@@ -1,12 +1,12 @@
 import json
 import os
-from app import app
+from app import app, db
 import hashlib
-from app.models import Category, Product
+from app.models import Category, Product, Receipt, ReceiptDetail
 
 
 def add_user(name, username, password, avatar):
-    users = read_user()
+    users = read_users()
     user = {
         "id": len(users) + 1,
         "name": name,
@@ -152,6 +152,27 @@ def validate_user(username, password):
             return user
 
     return None
+
+
+def add_receipt(items):
+    try:
+        r = Receipt()
+        db.session.add(r)
+        db.session.commit()
+
+        for item in items:
+            d = ReceiptDetail()
+            d.quantity = item["quantity"]
+            d.unit_price = item["price"]
+            d.receipt_id = r.id
+            d.product_id = item["id"]
+            db.session.add(d)
+        db.session.commit()
+        return True
+    except Exception as ex:
+        print(ex)
+        return False
+
 
 
 if __name__ == "__main__":

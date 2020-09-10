@@ -177,6 +177,15 @@ def cart():
     return render_template('cart.html')
 
 
+@app.route('/api/pay', methods=["post"])
+def pay():
+    if 'cart' in session and session['cart']:
+        if dao.add_receipt(session['cart'].values()):
+            return jsonify({"status":200, "message":"Successful"})
+
+    return jsonify({"status":500, "message":"failed"})
+
+
 @app.route("/api/cart", methods=['post'])
 def add_to_cart():
     data = json.loads(request.data)
